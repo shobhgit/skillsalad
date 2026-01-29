@@ -10,6 +10,8 @@ import org.springframework.web.bind.annotation.RestController;
 @RestController
 @RequestMapping("/api/students")
 public class StudentController {
+    //controller cannot exist without studentService
+
     private final StudentService studentService;
 
     public StudentController(StudentService studentService){
