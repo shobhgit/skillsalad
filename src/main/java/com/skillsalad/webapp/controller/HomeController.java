@@ -1,4 +1,4 @@
-package com.skillsalad.webapp.Controller;
+package com.skillsalad.webapp.controller;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RestController;
 
