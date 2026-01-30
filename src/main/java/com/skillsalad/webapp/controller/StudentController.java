@@ -1,5 +1,6 @@
 package com.skillsalad.webapp.controller;
 
+import com.skillsalad.webapp.dto.StudentResponseDto;
 import com.skillsalad.webapp.entity.Student;
 import com.skillsalad.webapp.service.StudentService;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -19,7 +20,15 @@ public class StudentController {
     }
 
     @PostMapping("/register")
-    public Student register(@RequestBody Student student){
-        return studentService.registerStudent(student);
+    public StudentResponseDto register(@RequestBody Student student) {
+
+        Student savedStudent = studentService.registerStudent(student);
+
+        return new StudentResponseDto(
+            savedStudent.getId(),
+            savedStudent.getName(),
+            savedStudent.getEmail()
+        );
+
     }
 }
