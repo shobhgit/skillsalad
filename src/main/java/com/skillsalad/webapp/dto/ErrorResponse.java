@@ -1,4 +1,4 @@
-package com.skillsalad.webapp.exception;
+package com.skillsalad.webapp.dto;
 
 public class ErrorResponse {
     private int status;

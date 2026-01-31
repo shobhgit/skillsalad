@@ -1,5 +1,6 @@
 package com.skillsalad.webapp.exception;
 
+import com.skillsalad.webapp.dto.ErrorResponse;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 
@@ -26,6 +27,16 @@ public class GlobalExceptionHandler {
                         HttpStatus.INTERNAL_SERVER_ERROR.value(),
                         "Internal server error"
 
+                ));
+    }
+    @ExceptionHandler(InvalidCredentialsException.class)
+    public ResponseEntity<ErrorResponse> handleInvalidCredentials(
+            InvalidCredentialsException IC){
+        return ResponseEntity
+                .status(HttpStatus.UNAUTHORIZED) //The 401 error(login failure)
+                .body(new ErrorResponse(
+                        HttpStatus.UNAUTHORIZED.value(),
+                        IC.getMessage()
                 ));
     }
 }
