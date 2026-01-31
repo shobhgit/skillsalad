@@ -2,6 +2,7 @@ package com.skillsalad.webapp.service;
 
 import com.skillsalad.webapp.dto.LoginRequestDto;
 import com.skillsalad.webapp.dto.LoginResponseDto;
+import com.skillsalad.webapp.dto.RegisterStudentRequestDto;
 import com.skillsalad.webapp.entity.Student;
 import com.skillsalad.webapp.exception.EmailAlreadyExistsException;
 import com.skillsalad.webapp.exception.InvalidCredentialsException;
@@ -22,18 +23,20 @@ public class StudentService{
         this.passwordEncoder = passwordEncoder;
     }
 
-    public Student registerStudent(Student student){
-        //Check Email Exits or not
-        if(studentRepository.findByEmail(student.getEmail()).isPresent()){
-            throw new EmailAlreadyExistsException("Email already registered!");
+    public Student registerStudent(RegisterStudentRequestDto request){
+
+        if (studentRepository.findByEmail(request.getEmail()).isPresent()){
+            throw new EmailAlreadyExistsException("Email already Registered!");
         }
 
-        //hashed password using Bcrypt
-        student.setPassword(passwordEncoder.encode(student.getPassword()));
+        Student student = new Student();
+        student.setName(request.getName());
+        student.setEmail(request.getEmail());
+        student.setPassword(request.getPassword());
 
         return studentRepository.save(student);
-
     }
+
     @Transactional
     public LoginResponseDto login(LoginRequestDto request){
         Student student= studentRepository.findByEmail(request.getEmail()).orElseThrow(() -> new InvalidCredentialsException("Invalid email or password"));
