@@ -1,6 +1,7 @@
 package com.skillsalad.webapp.service;
 
 import com.skillsalad.webapp.entity.Student;
+import com.skillsalad.webapp.exception.EmailAlreadyExistsException;
 import com.skillsalad.webapp.repository.StudentRepository;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
@@ -17,9 +18,13 @@ public class StudentService{
     }
 
     public Student registerStudent(Student student){
+        //Check Email Exits or not
+        if(studentRepository.findByEmail(student.getEmail()).isPresent()){
+            throw new EmailAlreadyExistsException("Email already registered!");
+        }
+
         //hashed password using Bcrypt
-        String hashedpassword = passwordEncoder.encode(student.getPassword());
-        student.setPassword(hashedpassword);
+        student.setPassword(passwordEncoder.encode(student.getPassword()));
 
         return studentRepository.save(student);
 
