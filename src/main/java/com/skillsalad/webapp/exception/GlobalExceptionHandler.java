@@ -9,6 +9,10 @@ import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 
+import java.time.LocalDateTime;
+import java.util.HashMap;
+import java.util.Map;
+
 @RestControllerAdvice
 public class GlobalExceptionHandler {
 
@@ -22,6 +26,7 @@ public class GlobalExceptionHandler {
                         ex.getMessage()
                 ));
     }
+    @ExceptionHandler(Exception.class)
     public ResponseEntity<ErrorResponse>handleGeneric(Exception ex){
         return ResponseEntity
                 .status(HttpStatus.INTERNAL_SERVER_ERROR)
@@ -56,5 +61,16 @@ public class GlobalExceptionHandler {
                         message
                 ));
 
+    }
+    @ExceptionHandler(DuplicateEnrollmentException.class)
+    public ResponseEntity<Map<String , Object>> handleDuplicateEnrollment(
+            DuplicateEnrollmentException ee){
+        Map<String, Object> body = new HashMap<>();
+        body.put("timestamp", LocalDateTime.now());
+        body.put("status", HttpStatus.CONFLICT.value());
+        body.put("error", "Conflict");
+        body.put("message",ee.getMessage());
+
+        return  new ResponseEntity<>(body, HttpStatus.CONFLICT);
     }
 }
