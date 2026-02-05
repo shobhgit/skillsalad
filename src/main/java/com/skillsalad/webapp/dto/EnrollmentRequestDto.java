@@ -1,15 +1,15 @@
 package com.skillsalad.webapp.dto;
 
 public class EnrollmentRequestDto {
-    private Long studentId;
+    private Long userId;
     private Long courseId;
 
-    public Long getStudentId() {
-        return studentId;
+    public Long getUserId() {
+        return userId;
     }
 
-    public void setStudentId(Long studentId) {
-        this.studentId = studentId;
+    public void setUserId(Long userId) {
+        this.userId = userId;
     }
 
     public Long getCourseId() {

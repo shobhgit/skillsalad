@@ -1,32 +1,44 @@
 package com.skillsalad.webapp.entity;
-import jakarta.persistence.*;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import jakarta.persistence.*;
+import java.util.HashSet;
+import java.util.Set;
 
 @Entity
-@Table(name = "students")
-public class Student {
+@Table(name = "users")
+public class User {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-
     @Column(nullable = false)
     private String name;
-
-    @Column(unique = true,nullable = false)
+    @Column(unique = true,nullable = false )
     private String email;
-
     @Column(nullable = false)
+    @JsonIgnore
     private String password;
+    @Column(nullable = false)
+    private boolean enabled=true;
 
-    //Constructors
-    public Student(){
-    }
-    public Student(String name, String email, String password){
+    @ManyToMany(fetch = FetchType.EAGER)
+    @JoinTable(
+            name = "user_roles",
+            joinColumns = @JoinColumn(name ="user_id"),
+            inverseJoinColumns = @JoinColumn(name = "role_id")
+    )
+    private Set<Role> roles = new HashSet<>();
+
+//Constructors
+    public User(){}
+
+    public User(String name, String email, String password) {
         this.name = name;
         this.email = email;
         this.password = password;
     }
-    //Getter and Setters
+//Getters and Setters
+
 
     public Long getId() {
         return id;
@@ -58,5 +70,17 @@ public class Student {
 
     public void setPassword(String password) {
         this.password = password;
+    }
+    public boolean isEnabled() {
+        return enabled;
+    }
+    public Set<Role> getRoles(){
+        return roles;
+    }
+
+    //domain method
+
+    public void addRole(Role role){
+        this.roles.add(role);
     }
 }

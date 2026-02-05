@@ -9,28 +9,33 @@ import java.time.LocalDateTime;
 @Table(
         name = "enrollments",
         uniqueConstraints = {
-                @UniqueConstraint(columnNames = {"student_id", "course_id"})
+                @UniqueConstraint(columnNames = {"user_id", "course_id"})
         }
 )
 public class Enrollment {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long enrollmentId;
+    private Long id;
 
-    @Column(name = "student_id",nullable = false)
-    private Long studentId;
+    @ManyToOne(fetch = FetchType.LAZY,optional = false)
+    @JoinColumn(name = "user_id")
+    private User user;
 
-    @Column(name = "course_id", nullable = false)
-    private Long courseId;
+    @ManyToOne(fetch = FetchType.LAZY,optional = false)
+    @JoinColumn(name = "course_id")
+    private Course course;
 
     private LocalDateTime enrolledAt;
 
+    @Column(nullable = false)
     private String status; //Enrolled,Completed, Canceled
 
-    public Enrollment(Long studentId, Long courseId){
-        this.studentId=studentId;
-        this.courseId=courseId;
+    public Enrollment(User user, Course course){
+        this.user=user;
+        this.course=course;
+        this.enrolledAt = LocalDateTime.now();
+        this.status="ENROLLED";
     }
     protected Enrollment(){}
     @PrePersist
@@ -39,28 +44,18 @@ public class Enrollment {
         status = "ENROLLED";
     }
 //GETTERS AND SETTERS
-    public Long getEnrollmentId() {
-        return enrollmentId;
+
+
+    public Long getId() {
+        return id;
     }
 
-    public void setEnrollmentId(Long enrollmentId) {
-        this.enrollmentId = enrollmentId;
+    public User getUser() {
+        return user;
     }
 
-    public Long getStudentId() {
-        return studentId;
-    }
-
-    public void setStudentId(Long studentId) {
-        this.studentId = studentId;
-    }
-
-    public Long getCourseId() {
-        return courseId;
-    }
-
-    public void setCourseId(Long courseId) {
-        this.courseId = courseId;
+    public Course getCourse() {
+        return course;
     }
 
     public LocalDateTime getEnrolledAt() {

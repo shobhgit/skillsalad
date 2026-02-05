@@ -1,6 +1,7 @@
 package com.skillsalad.webapp.controller;
 
 import com.skillsalad.webapp.dto.EnrollmentRequestDto;
+import com.skillsalad.webapp.dto.EnrollmentResponseDto;
 import com.skillsalad.webapp.entity.Enrollment;
 import com.skillsalad.webapp.service.EnrollmentService;
 import org.springframework.web.bind.annotation.*;
@@ -14,22 +15,24 @@ public class EnrollmentController {
 
     private final EnrollmentService enrollmentService;
 
+
     public EnrollmentController(EnrollmentService enrollmentService) {
         this.enrollmentService = enrollmentService;
+
     }
 
     //Enroll Student in course
     @PostMapping
-    public Enrollment enroll(@RequestBody EnrollmentRequestDto request){
+    public EnrollmentResponseDto enroll(@RequestBody EnrollmentRequestDto request){
         return enrollmentService.enrollStudent(
-                request.getStudentId(),
+                request.getUserId(),
                 request.getCourseId()
         );
     }
 
     //Get all enrollments of a student
-    @GetMapping("/student/{studentId}")
-    public List<Enrollment> getStuentEnrollments(@PathVariable Long studentId){
-        return enrollmentService.getEnrollmentsByStudent(studentId);
+    @GetMapping("/student/{userId}")
+    public List<EnrollmentResponseDto> getUserEnrollments(@PathVariable Long userId){
+        return enrollmentService.getEnrollmentsByUser(userId);
     }
 }

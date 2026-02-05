@@ -1,5 +1,6 @@
 package com.skillsalad.webapp.config;
 
+import com.skillsalad.webapp.dto.EnrollmentResponseDto;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
